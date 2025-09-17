@@ -15,7 +15,7 @@ export function useTicketGenerator() {
 
   // Generate unique ticket number in format: SKY.65087-001
   const generateTicketNumber = (): string => {
-    const prefix = "SKY";
+    const prefix = "Sky";
     // Generate 5-digit number (10000-99999)
     const mainNumber = Math.floor(Math.random() * 90000) + 10000;
     // Generate 3-digit sequence (001-999)
