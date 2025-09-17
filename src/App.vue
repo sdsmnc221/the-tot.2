@@ -61,7 +61,7 @@ onMounted(async () => {
 <template>
   <main
     class="flex justify-center items-center w-[100vw] h-[100vh] overflow-hidden bg-teal-950"
-    :class="{ 'opacity-0': !isFrameLoading }"
+    :class="{ 'opacity-0': isFrameLoading }"
   >
     <div
       v-if="!showTicketGenerator"
@@ -94,7 +94,7 @@ onMounted(async () => {
     <TicketGenerator v-else></TicketGenerator>
   </main>
 
-  <Loader :class="{ 'opacity-0': isFrameLoading }"></Loader>
+  <Loader :class="{ 'opacity-0': !isFrameLoading }"></Loader>
 </template>
 
 <style scoped>
