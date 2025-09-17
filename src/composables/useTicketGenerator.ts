@@ -6,11 +6,16 @@ export function useTicketGenerator() {
   const currentTicket = ref<TicketData | null>(null);
   const error = ref<string | null>(null);
 
-  const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3001/api";
+  // Use the Vercel domain for production
+  const API_BASE =
+    import.meta.env.VITE_API_URL ||
+    (import.meta.env.PROD
+      ? "https://the-tot.2.vercel.app/api"
+      : "http://localhost:3000/api");
 
-  // Generate unique ticket number in format: Sky.65087-001
+  // Generate unique ticket number in format: SKY.65087-001
   const generateTicketNumber = (): string => {
-    const prefix = "Sky";
+    const prefix = "SKY";
     // Generate 5-digit number (10000-99999)
     const mainNumber = Math.floor(Math.random() * 90000) + 10000;
     // Generate 3-digit sequence (001-999)
@@ -33,7 +38,7 @@ export function useTicketGenerator() {
       const ticketNumber = generateTicketNumber();
       const skyType = selectRandomSky();
 
-      // Call API to save ticket
+      // Call serverless API
       const response = await fetch(`${API_BASE}/sky-tickets`, {
         method: "POST",
         headers: {
