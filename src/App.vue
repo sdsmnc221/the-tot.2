@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { type TemplateRef, type Ref, ref, onMounted } from "vue";
+import { type TemplateRef, type Ref, ref, onMounted, nextTick } from "vue";
 
 import { Play, Pause } from "lucide-vue-next";
-
 import LiquidRainbowButton from "./components/LiquidRainbowButton.vue";
-
 import TicketGenerator from "./components/TicketGenerator.vue";
+import Loader from "./components/Loader.vue";
+
+const isFrameLoading: Ref<boolean> = ref(true);
 
 const videoTeaser: TemplateRef<HTMLVideoElement> = ref(null);
+
+const frame: TemplateRef<HTMLImageElement> = ref(null);
 
 const isVideoPlaying: Ref<boolean> = ref(false);
 
@@ -26,7 +29,23 @@ const playVideoTeaser = () => {
   }
 };
 
-onMounted(() => {
+const handleFrameLoaded = () => {
+  isFrameLoading.value = false;
+};
+
+onMounted(async () => {
+  await nextTick();
+
+  setTimeout(() => {
+    if (frame.value) {
+      console.log(frame.value);
+      if (frame.value.complete) {
+        frame.value.addEventListener("load", handleFrameLoaded);
+        frame.value.addEventListener("error", handleFrameLoaded);
+      }
+    }
+  }, 1000);
+
   if (videoTeaser.value) {
     videoTeaser.value.addEventListener("click", playVideoTeaser);
     videoTeaser.value.addEventListener("ended", () => {
@@ -42,6 +61,7 @@ onMounted(() => {
 <template>
   <main
     class="flex justify-center items-center w-[100vw] h-[100vh] overflow-hidden bg-teal-950"
+    :class="{ 'opacity-0': !isFrameLoading }"
   >
     <div
       v-if="!showTicketGenerator"
@@ -58,7 +78,8 @@ onMounted(() => {
         <img
           alt="Theatre of Wonder"
           src="/frame.png"
-          class="aspect-square w-full pointer-events-none"
+          class="frame aspect-square w-full pointer-events-none"
+          ref="frame"
         />
         <LiquidRainbowButton
           @click="playVideoTeaser"
@@ -72,6 +93,8 @@ onMounted(() => {
 
     <TicketGenerator v-else></TicketGenerator>
   </main>
+
+  <Loader :class="{ 'opacity-0': isFrameLoading }"></Loader>
 </template>
 
 <style scoped>
