@@ -43,7 +43,10 @@ onMounted(() => {
   <main
     class="flex justify-center items-center w-[100vw] h-[100vh] overflow-hidden bg-teal-950"
   >
-    <div v-if="showTicketGenerator">
+    <div
+      v-if="!showTicketGenerator"
+      class="flex justify-center items-center w-[100vw] h-[100vh] overflow-hidden"
+    >
       <div class="absolute h-[26vh] aspect-square z-0">
         <video
           class="aspect-square w-full"
