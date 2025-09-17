@@ -25,7 +25,7 @@ app.set("trust proxy", true);
 app.use("/api", skyTicketsRouter);
 
 // Health check
-app.get("/health", (req, res) => {
+app.get("/health", (_req, res) => {
   res.json({ status: "OK", timestamp: new Date().toISOString() });
 });
 

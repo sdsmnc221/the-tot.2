@@ -100,7 +100,7 @@ router.patch("/sky-tickets/:ticketNumber/download", async (req, res) => {
 });
 
 // GET /api/sky-tickets/stats - Get ticket statistics
-router.get("/sky-tickets/stats", async (req, res) => {
+router.get("/sky-tickets/stats", async (_req, res) => {
   try {
     const stats = await getSkyTicketStats();
     res.json(stats);
