@@ -112,34 +112,6 @@ const drawStars = (ctx: CanvasRenderingContext2D) => {
   }
 };
 
-const drawPerforatedBorder = (ctx: CanvasRenderingContext2D) => {
-  ctx.fillStyle = "#ffffff";
-  const dotSize = 8;
-  const spacing = 20;
-
-  // Top and bottom borders
-  for (let x = dotSize; x < canvasWidth - dotSize; x += spacing) {
-    ctx.beginPath();
-    ctx.arc(x, dotSize, dotSize / 2, 0, 2 * Math.PI);
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(x, canvasHeight - dotSize, dotSize / 2, 0, 2 * Math.PI);
-    ctx.fill();
-  }
-
-  // Left and right borders
-  for (let y = dotSize; y < canvasHeight - dotSize; y += spacing) {
-    ctx.beginPath();
-    ctx.arc(dotSize, y, dotSize / 2, 0, 2 * Math.PI);
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(canvasWidth - dotSize, y, dotSize / 2, 0, 2 * Math.PI);
-    ctx.fill();
-  }
-};
-
 const engraveTicketNumber = (
   ctx: CanvasRenderingContext2D,
   ticketNumber: string

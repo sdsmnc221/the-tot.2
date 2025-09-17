@@ -112,7 +112,7 @@ export function useTicketGenerator() {
 
   return {
     isGenerating: readonly(isGenerating),
-    currentTicket: readonly(currentTicket),
+    currentTicket: currentTicket,
     error: readonly(error),
     generateTicket,
     markAsDownloaded,
