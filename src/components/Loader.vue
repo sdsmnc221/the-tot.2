@@ -6,8 +6,7 @@
   width: 100%;
   height: 100%;
 }
-body {
-}
+
 .loader-shape-3 {
   position: relative;
   display: inline-block;

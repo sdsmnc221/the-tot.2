@@ -36,15 +36,9 @@ const handleFrameLoaded = () => {
 onMounted(async () => {
   await nextTick();
 
-  setTimeout(() => {
-    if (frame.value) {
-      console.log(frame.value);
-      if (frame.value.complete) {
-        frame.value.addEventListener("load", handleFrameLoaded);
-        frame.value.addEventListener("error", handleFrameLoaded);
-      }
-    }
-  }, 1000);
+  if (frame.value) {
+    frame.value.addEventListener("load", handleFrameLoaded);
+  }
 
   if (videoTeaser.value) {
     videoTeaser.value.addEventListener("click", playVideoTeaser);
@@ -61,7 +55,6 @@ onMounted(async () => {
 <template>
   <main
     class="flex justify-center items-center w-[100vw] h-[100vh] overflow-hidden bg-teal-950"
-    :class="{ 'opacity-0': isFrameLoading }"
   >
     <div
       v-if="!showTicketGenerator"
@@ -94,7 +87,16 @@ onMounted(async () => {
     <TicketGenerator v-else></TicketGenerator>
   </main>
 
-  <Loader :class="{ 'opacity-0': !isFrameLoading }"></Loader>
+  <Transition
+    enter-active-class="transition-all duration-2000 absolute top-0 left-0"
+    enter-from-class="blur-md opacity-0"
+    enter-to-class="blur-none opacity-100"
+    leave-active-class="transition-all duration-2000 absolute top-0 left-0"
+    leave-from-class="blur-none opacity-100"
+    leave-to-class="blur-md opacity-0"
+  >
+    <Loader class="fixed inset-0 z-99" v-if="isFrameLoading"></Loader>
+  </Transition>
 </template>
 
 <style scoped>
