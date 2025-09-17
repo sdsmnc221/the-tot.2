@@ -1,11 +1,11 @@
 // api/sky-tickets/index.ts
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { saveSkyTicket, SkyTicketEntry } from "../utils/redis";
+import { saveSkyTicket, SkyTicketEntry } from "../utils/redis.js";
 import {
   getClientIP,
   getUserAgent,
   validateTicketData,
-} from "../utils/helpers";
+} from "../utils/helpers.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS

@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { updateSkyTicket } from "../utils/redis";
+import { updateSkyTicket } from "../utils/redis.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
