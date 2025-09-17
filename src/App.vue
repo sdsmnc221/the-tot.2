@@ -46,7 +46,7 @@ onMounted(async () => {
   }
 
   if (videoTeaser.value) {
-    videoTeaser.value.addEventListener("load", handleTeaserLoaded);
+    videoTeaser.value.addEventListener("canplaythrough", handleTeaserLoaded);
     videoTeaser.value.addEventListener("click", playVideoTeaser);
     videoTeaser.value.addEventListener("ended", () => {
       isVideoPlaying.value = false;
