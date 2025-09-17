@@ -1,52 +1,93 @@
 <template>
-  <div class="ticket-generator">
-    <div class="header">
-      <h1>✨ Sky Ticket Generator ✨</h1>
+  <div
+    class="font-serif max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 text-white min-h-screen"
+  >
+    <!-- Header Section -->
+    <div class="text-center mb-8 sm:mb-12 pt-8 sm:pt-12">
+      <h1
+        class="text-3xl sm:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent mb-4 drop-shadow-lg"
+      >
+        ✨ Sky Ticket Generator ✨
+      </h1>
     </div>
 
-    <div class="generator-section">
+    <!-- Generator Section -->
+    <div class="text-center mb-8 sm:mb-12">
       <button
         v-if="!currentTicket"
         @click="handleGenerateTicket"
         :disabled="isGenerating"
-        class="generate-btn"
-        :class="{ generating: isGenerating }"
+        class="bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 disabled:opacity-70 disabled:cursor-not-allowed border-none px-6 sm:px-10 py-4 sm:py-5 text-lg sm:text-xl font-semibold text-green-900 rounded-2xl cursor-pointer transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 uppercase tracking-wide"
+        :class="{ 'animate-pulse': isGenerating }"
       >
-        <span v-if="!isGenerating">🎫 Generate Sky Ticket</span>
-        <span v-else>🌟 Creating Magic...</span>
+        <span v-if="!isGenerating" class="block">🎫 Generate Sky Ticket</span>
+        <span v-else class="block">🌟 Creating Magic...</span>
       </button>
 
-      <div v-if="error" class="error-message">❌ {{ error }}</div>
+      <div
+        v-if="error"
+        class="text-red-400 bg-red-400/15 border-2 border-red-400 p-4 rounded-lg mt-6 inline-block font-semibold"
+      >
+        ❌ {{ error }}
+      </div>
     </div>
 
-    <div v-if="currentTicket" class="ticket-display">
-      <div class="flex gap-20 justify-center items-center">
-        <SkyTicketCanvas :ticket="currentTicket" />
+    <!-- Ticket Display Section -->
+    <div v-if="currentTicket" class="mt-8 sm:mt-12">
+      <!-- Responsive Layout: Stack on mobile, side-by-side on desktop -->
+      <div
+        class="flex flex-col lg:flex-row gap-6 lg:gap-20 justify-center items-center"
+      >
+        <!-- Ticket Canvas -->
+        <div class="w-full lg:w-auto flex justify-center">
+          <SkyTicketCanvas :ticket="currentTicket" class="max-w-full h-auto" />
+        </div>
 
-        <div class="ticket-info">
-          <p>
-            <strong>Ticket Number:</strong> {{ currentTicket.ticketNumber }}
-          </p>
-          <p>
-            <strong>Generated:</strong>
-            {{ formatDate(currentTicket.generatedAt) }}
-          </p>
-          <p>
-            <strong>Sky Type:</strong> {{ currentTicket.skyType.toUpperCase() }}
-          </p>
-          <p>
-            <strong>Status:</strong>
-            {{
-              currentTicket.downloaded
-                ? "✅ Downloaded"
-                : "⏳ Ready for Download"
-            }}
-          </p>
+        <!-- Ticket Info -->
+        <div
+          class="bg-white/10 p-6 sm:p-8 rounded-2xl backdrop-blur-md border border-white/20 w-full lg:w-auto lg:min-w-[300px] text-left"
+        >
+          <div class="space-y-3 sm:space-y-4">
+            <p class="text-sm sm:text-base">
+              <strong class="text-yellow-400 font-semibold"
+                >Ticket Number:</strong
+              >
+              <span class="block sm:inline sm:ml-2 mt-1 sm:mt-0">{{
+                currentTicket.ticketNumber
+              }}</span>
+            </p>
+            <p class="text-sm sm:text-base">
+              <strong class="text-yellow-400 font-semibold">Generated:</strong>
+              <span class="block sm:inline sm:ml-2 mt-1 sm:mt-0">{{
+                formatDate(currentTicket.generatedAt)
+              }}</span>
+            </p>
+            <p class="text-sm sm:text-base">
+              <strong class="text-yellow-400 font-semibold">Sky Type:</strong>
+              <span class="block sm:inline sm:ml-2 mt-1 sm:mt-0">{{
+                currentTicket.skyType.toUpperCase()
+              }}</span>
+            </p>
+            <p class="text-sm sm:text-base">
+              <strong class="text-yellow-400 font-semibold">Status:</strong>
+              <span class="block sm:inline sm:ml-2 mt-1 sm:mt-0">
+                {{
+                  currentTicket.downloaded
+                    ? "✅ Downloaded"
+                    : "⏳ Ready for Download"
+                }}
+              </span>
+            </p>
+          </div>
         </div>
       </div>
 
-      <div class="ticket-actions">
-        <button @click="downloadTicket" class="download-btn">
+      <!-- Download Actions -->
+      <div class="text-center mt-8 sm:mt-12">
+        <button
+          @click="downloadTicket"
+          class="bg-gradient-to-r from-teal-700 to-teal-600 hover:from-teal-600 hover:to-teal-400 border-none px-6 sm:px-8 py-3 sm:py-4 text-lg sm:text-xl font-semibold text-white rounded-xl cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg uppercase tracking-wide w-full sm:w-auto"
+        >
           📥 Download Your Ticket
         </button>
       </div>
@@ -105,146 +146,3 @@ const formatDate = (date: Date) => {
   });
 };
 </script>
-
-<style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap");
-
-.ticket-generator {
-  font-family: "Cinzel", serif;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  color: #fff;
-}
-
-.header {
-  text-align: center;
-  margin-bottom: 40px;
-  padding-top: 40px;
-}
-
-.header h1 {
-  font-size: 3em;
-  font-weight: 700;
-  background: linear-gradient(45deg, #ffd700, #ffed4a);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 10px;
-  text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-}
-
-.header p {
-  font-size: 1.2em;
-  opacity: 0.8;
-}
-
-.generator-section {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.generate-btn {
-  background: linear-gradient(45deg, #b8860b, #daa520);
-  border: none;
-  padding: 18px 40px;
-  font-size: 1.3em;
-  font-family: "Cinzel", serif;
-  font-weight: 600;
-  color: #2c5530;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(184, 134, 11, 0.4);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.generate-btn:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(184, 134, 11, 0.6);
-  background: linear-gradient(45deg, #daa520, #ffd700);
-}
-
-.generate-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.generate-btn.generating {
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.05);
-  }
-}
-
-.error-message {
-  color: #ff6b6b;
-  background: rgba(255, 107, 107, 0.15);
-  border: 2px solid #ff6b6b;
-  padding: 15px;
-  border-radius: 10px;
-  margin-top: 20px;
-  display: inline-block;
-  font-weight: 600;
-}
-
-.ticket-display {
-  margin-top: 40px;
-}
-
-.ticket-actions {
-  text-align: center;
-  margin-top: 30px;
-}
-
-.download-btn {
-  background: linear-gradient(45deg, #2d5a57, #4a9b8e);
-  border: none;
-  padding: 15px 30px;
-  font-size: 1.2em;
-  font-family: "Cinzel", serif;
-  font-weight: 600;
-  color: #fff;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 25px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.download-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(45, 90, 87, 0.4);
-  background: linear-gradient(45deg, #4a9b8e, #72d4c4);
-}
-
-.ticket-info {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 25px;
-  border-radius: 15px;
-  backdrop-filter: blur(15px);
-  display: inline-block;
-  text-align: left;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.ticket-info p {
-  margin: 10px 0;
-  font-size: 1em;
-}
-
-.ticket-info strong {
-  color: #ffd700;
-  font-weight: 600;
-}
-</style>

@@ -56,35 +56,49 @@ onMounted(async () => {
   <main
     class="flex justify-center items-center w-[100vw] h-[100vh] overflow-hidden bg-teal-950"
   >
-    <div
-      v-if="!showTicketGenerator"
-      class="flex justify-center items-center w-[100vw] h-[100vh] overflow-hidden"
+    <Transition
+      enter-active-class="transition-all duration-500"
+      enter-from-class="opacity-0 -translate-y-2"
+      enter-to-class="opacity-100"
+      leave-active-class="transition-all duration-500"
+      leave-from-class="opacity-100 "
+      leave-to-class="opacity-0 -translate-y-2"
+      mode="out-in"
     >
-      <div class="absolute h-[26vh] aspect-square z-0">
-        <video
-          class="aspect-square w-full"
-          src="/teaser.mp4"
-          ref="videoTeaser"
-        ></video>
-      </div>
-      <div class="h-[64vh] aspect-square relative z-1">
-        <img
-          alt="Theatre of Wonder"
-          src="/frame.png"
-          class="frame aspect-square w-full pointer-events-none"
-          ref="frame"
-        />
-        <LiquidRainbowButton
-          @click="playVideoTeaser"
-          class="absolute bottom-[20%] left-1/2 translate-x-[-50%]"
+      <div
+        v-if="!showTicketGenerator"
+        class="flex justify-center items-center w-[100vw] h-[100vh] overflow-hidden"
+      >
+        <div
+          class="absolute md:h-[26vh] md:w-auto w-[48vw] h-auto aspect-square z-0"
         >
-          <Play v-if="!isVideoPlaying"></Play>
-          <Pause v-else></Pause>
-        </LiquidRainbowButton>
+          <video
+            class="aspect-square w-full"
+            src="/teaser.mp4"
+            ref="videoTeaser"
+          ></video>
+        </div>
+        <div
+          class="md:h-[64vh] md:w-auto w-[90vw] h-auto aspect-square relative z-1"
+        >
+          <img
+            alt="Theatre of Wonder"
+            src="/frame.png"
+            class="frame aspect-square w-full pointer-events-none"
+            ref="frame"
+          />
+          <LiquidRainbowButton
+            @click="playVideoTeaser"
+            class="absolute md:bottom-[20%] bottom-[22%] left-1/2 translate-x-[-50%]"
+          >
+            <Play v-if="!isVideoPlaying"></Play>
+            <Pause v-else></Pause>
+          </LiquidRainbowButton>
+        </div>
       </div>
-    </div>
 
-    <TicketGenerator v-else></TicketGenerator>
+      <TicketGenerator v-else></TicketGenerator>
+    </Transition>
   </main>
 
   <Transition
