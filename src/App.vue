@@ -7,6 +7,7 @@ import TicketGenerator from "./components/TicketGenerator.vue";
 import Loader from "./components/Loader.vue";
 
 const isFrameLoading: Ref<boolean> = ref(true);
+const isTeaserLoading: Ref<boolean> = ref(true);
 
 const videoTeaser: TemplateRef<HTMLVideoElement> = ref(null);
 
@@ -31,6 +32,10 @@ const playVideoTeaser = () => {
 
 const handleFrameLoaded = () => {
   isFrameLoading.value = false;
+};
+
+const handleTeaderLoaded = () => {
+  isTeaserLoading.value = false;
 };
 
 onMounted(async () => {
@@ -76,6 +81,7 @@ onMounted(async () => {
             class="aspect-square w-full"
             src="/teaser.mp4"
             ref="videoTeaser"
+            @load="handleTeaderLoaded"
           ></video>
         </div>
         <div
@@ -109,7 +115,10 @@ onMounted(async () => {
     leave-from-class="blur-none opacity-100"
     leave-to-class="blur-md opacity-0"
   >
-    <Loader class="fixed inset-0 z-99" v-if="isFrameLoading"></Loader>
+    <Loader
+      class="fixed inset-0 z-99"
+      v-if="isFrameLoading || isTeaserLoading"
+    ></Loader>
   </Transition>
 </template>
 

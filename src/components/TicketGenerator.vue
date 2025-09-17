@@ -3,7 +3,7 @@
     class="font-serif max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 text-white min-h-screen"
   >
     <!-- Header Section -->
-    <div class="text-center mb-8 sm:mb-12 pt-8 sm:pt-12">
+    <div class="text-center mb-8 sm:mb-12 pt-8 sm:pt-12" v-if="!currentTicket">
       <h1
         class="text-3xl sm:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent mb-4 drop-shadow-lg"
       >
