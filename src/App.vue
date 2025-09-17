@@ -34,7 +34,7 @@ const handleFrameLoaded = () => {
   isFrameLoading.value = false;
 };
 
-const handleTeaderLoaded = () => {
+const handleTeaserLoaded = () => {
   isTeaserLoading.value = false;
 };
 
@@ -46,6 +46,7 @@ onMounted(async () => {
   }
 
   if (videoTeaser.value) {
+    videoTeaser.value.addEventListener("load", handleTeaserLoaded);
     videoTeaser.value.addEventListener("click", playVideoTeaser);
     videoTeaser.value.addEventListener("ended", () => {
       isVideoPlaying.value = false;
@@ -81,7 +82,6 @@ onMounted(async () => {
             class="aspect-square w-full"
             src="/teaser.mp4"
             ref="videoTeaser"
-            @load="handleTeaderLoaded"
           ></video>
         </div>
         <div
