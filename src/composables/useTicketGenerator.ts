@@ -10,7 +10,7 @@ export function useTicketGenerator() {
   const API_BASE =
     import.meta.env.VITE_API_URL ||
     (import.meta.env.PROD
-      ? "https://the-tot.2.vercel.app/api"
+      ? "https://the-tot-2.vercel.app/api"
       : "http://localhost:3000/api");
 
   // Generate unique ticket number in format: SKY.65087-001
