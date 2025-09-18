@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { type TemplateRef, type Ref, ref, onMounted, nextTick } from "vue";
+import { inject } from "@vercel/analytics";
 
 import { Play, Pause } from "lucide-vue-next";
 import LiquidRainbowButton from "./components/LiquidRainbowButton.vue";
@@ -53,6 +54,8 @@ onMounted(async () => {
       showTicketGenerator.value = true;
     });
   }
+
+  inject();
 });
 
 //** TICKET */
