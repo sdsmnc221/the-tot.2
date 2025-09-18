@@ -120,16 +120,6 @@
           📥 Download Your Ticket
         </button>
       </div>
-
-      <!-- New Ticket Button -->
-      <div class="text-center mt-6">
-        <button
-          @click="resetForm"
-          class="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 border-none px-4 sm:px-6 py-2 sm:py-3 text-base sm:text-lg font-semibold text-white rounded-xl cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg uppercase tracking-wide"
-        >
-          🎫 Generate New Ticket
-        </button>
-      </div>
     </div>
   </div>
 </template>
@@ -176,12 +166,6 @@ const downloadTicket = async () => {
       };
     }
   }, "image/png");
-};
-
-const resetForm = () => {
-  currentTicket.value = null;
-  userName.value = "";
-  error.value = null;
 };
 
 const formatDate = (date: Date) => {
