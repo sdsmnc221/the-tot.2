@@ -7,11 +7,7 @@ export function useTicketGenerator() {
   const error = ref<string | null>(null);
 
   // Use the Vercel domain for production
-  const API_BASE =
-    import.meta.env.VITE_API_URL ||
-    (import.meta.env.PROD
-      ? "https://the-tot-2.vercel.app/api"
-      : "http://localhost:3000/api");
+  const API_BASE = import.meta.env.VITE_API_URL!;
 
   // Generate unique ticket number in format: SKY.65087-001
   const generateTicketNumber = (): string => {

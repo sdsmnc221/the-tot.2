@@ -149,7 +149,7 @@ const addTicketDetails = (
   ctx.fillText("✨ Train of Thoughts ✨", canvasWidth / 2, 60);
 
   // Date
-  ctx.font = '18px "Trattatello", serif';
+  ctx.font = '16px "Trattatello", serif';
   ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
   const dateStr = ticket.generatedAt.toLocaleDateString("en-US", {
     year: "numeric",
@@ -158,7 +158,7 @@ const addTicketDetails = (
     hour: "2-digit",
     minute: "2-digit",
   });
-  ctx.fillText(`${dateStr}`, canvasWidth / 2, canvasHeight - 80);
+  ctx.fillText(`Issued date: ${dateStr}`, canvasWidth / 2, canvasHeight - 80);
 
   // Sky type indicator
   ctx.font = '16px "Cinzel", serif';

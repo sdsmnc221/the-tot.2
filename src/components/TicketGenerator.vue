@@ -7,7 +7,7 @@
       <h1
         class="text-3xl sm:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent mb-4 drop-shadow-lg"
       >
-        ✨ Sky Ticket Generator ✨
+        ✨ The Train of Thoughts is welcoming you aboard..! ✨
       </h1>
     </div>
 
@@ -57,7 +57,7 @@
               }}</span>
             </p>
             <p class="text-sm sm:text-base">
-              <strong class="text-yellow-400 font-semibold">Generated:</strong>
+              <strong class="text-yellow-400 font-semibold">Issued:</strong>
               <span class="block sm:inline sm:ml-2 mt-1 sm:mt-0">{{
                 formatDate(currentTicket.generatedAt)
               }}</span>
