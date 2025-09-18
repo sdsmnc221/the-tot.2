@@ -26,7 +26,9 @@ export function useTicketGenerator() {
   };
 
   // Generate ticket and save to Redis via API
-  const generateTicket = async (): Promise<TicketData | null> => {
+  const generateTicket = async (
+    passengerName?: string
+  ): Promise<TicketData | null> => {
     try {
       isGenerating.value = true;
       error.value = null;
@@ -34,16 +36,24 @@ export function useTicketGenerator() {
       const ticketNumber = generateTicketNumber();
       const skyType = selectRandomSky();
 
+      // Prepare request body
+      const requestBody: any = {
+        ticketNumber,
+        skyType,
+      };
+
+      // Add passenger name if provided
+      if (passengerName && passengerName.trim()) {
+        requestBody.passengerName = passengerName.trim();
+      }
+
       // Call serverless API
       const response = await fetch(`${API_BASE}/sky-tickets`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          ticketNumber,
-          skyType,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
@@ -59,6 +69,7 @@ export function useTicketGenerator() {
           skyType: result.ticket.skyType,
           generatedAt: new Date(result.ticket.generatedAt),
           downloaded: false,
+          passengerName: result.ticket.passengerName,
         };
 
         currentTicket.value = ticketData;
@@ -114,7 +125,7 @@ export function useTicketGenerator() {
   return {
     isGenerating: readonly(isGenerating),
     currentTicket: currentTicket,
-    error: readonly(error),
+    error: error,
     generateTicket,
     markAsDownloaded,
     getStats,

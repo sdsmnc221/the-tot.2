@@ -1,4 +1,3 @@
-// api/sky-tickets/index.ts
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { saveSkyTicket, SkyTicketEntry } from "../utils/redis.js";
 import {
@@ -28,7 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
       }
 
-      const { ticketNumber, skyType } = req.body;
+      const { ticketNumber, skyType, passengerName } = req.body;
 
       // Get client info
       const userAgent = getUserAgent(req);
@@ -42,6 +41,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         downloaded: false,
         userAgent,
         ipAddress,
+        passengerName: passengerName || undefined,
       };
 
       await saveSkyTicket(ticketData);
@@ -53,6 +53,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           ticketNumber: ticketData.ticketNumber,
           skyType: ticketData.skyType,
           generatedAt: ticketData.generatedAt,
+          passengerName: ticketData.passengerName,
         },
       });
     } catch (error) {

@@ -27,6 +27,7 @@ export interface SkyTicketEntry {
   downloadedAt?: Date;
   userAgent?: string;
   ipAddress?: string;
+  passengerName?: string;
 }
 
 export async function getSkyTickets(limit = 50): Promise<SkyTicketEntry[]> {
@@ -158,6 +159,9 @@ export async function getSkyTicketStats() {
     const downloadedCount = tickets.filter((t: any) => t.downloaded).length;
     const sky1Count = tickets.filter((t: any) => t.skyType === "sky1").length;
     const sky2Count = tickets.filter((t: any) => t.skyType === "sky2").length;
+    const namedTicketsCount = tickets.filter(
+      (t: any) => t.passengerName && t.passengerName.trim()
+    ).length;
 
     return {
       totalTickets: tickets.length,
@@ -165,6 +169,8 @@ export async function getSkyTicketStats() {
       pendingTickets: tickets.length - downloadedCount,
       sky1Tickets: sky1Count,
       sky2Tickets: sky2Count,
+      namedTickets: namedTicketsCount,
+      anonymousTickets: tickets.length - namedTicketsCount,
       redisConnected: true,
     };
   } catch (error: any) {
@@ -175,6 +181,8 @@ export async function getSkyTicketStats() {
       pendingTickets: 0,
       sky1Tickets: 0,
       sky2Tickets: 0,
+      namedTickets: 0,
+      anonymousTickets: 0,
       redisConnected: false,
       error: error.message,
     };

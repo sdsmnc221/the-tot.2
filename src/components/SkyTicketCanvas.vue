@@ -13,9 +13,6 @@
 import { ref, onMounted, watch } from "vue";
 import type { TicketData } from "../types/ticket";
 
-import Sky1 from "../../public/sky-ticket-1.png";
-import Sky2 from "../../public/sky-ticket-2.png";
-
 interface Props {
   ticket: TicketData | null;
 }
@@ -28,8 +25,8 @@ const canvasHeight = 390;
 
 // Sky ticket images - these should be your actual image URLs
 const skyImages = {
-  sky1: Sky1,
-  sky2: Sky2,
+  sky1: "/sky-ticket-1.png",
+  sky2: "/sky-ticket-2.png",
 };
 
 const loadFont = async (): Promise<void> => {

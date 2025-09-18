@@ -11,6 +11,7 @@ export interface TicketData {
   generatedAt: Date;
   skyType: "sky1" | "sky2";
   downloaded?: boolean;
+  passengerName?: string;
 }
 
 export interface ApiResponse<T> {

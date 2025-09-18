@@ -11,6 +11,29 @@
       </h1>
     </div>
 
+    <!-- Name Input Section -->
+    <div class="text-center mb-6 sm:mb-8" v-if="!currentTicket">
+      <div class="max-w-md mx-auto">
+        <label
+          for="userName"
+          class="block text-yellow-400 font-semibold mb-2 text-lg"
+        >
+          Your Name (Optional)
+        </label>
+        <input
+          id="userName"
+          v-model="userName"
+          type="text"
+          placeholder="Enter your name..."
+          maxlength="50"
+          class="w-full px-4 py-3 text-lg bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/60 backdrop-blur-md focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 transition-all duration-300"
+        />
+        <p class="text-white/60 text-sm mt-2">
+          This will be included in your ticket metadata
+        </p>
+      </div>
+    </div>
+
     <!-- Generator Section -->
     <div class="text-center mb-8 sm:mb-12">
       <button
@@ -56,6 +79,12 @@
                 currentTicket.ticketNumber
               }}</span>
             </p>
+            <p v-if="currentTicket.passengerName" class="text-sm sm:text-base">
+              <strong class="text-yellow-400 font-semibold">Passenger:</strong>
+              <span class="block sm:inline sm:ml-2 mt-1 sm:mt-0">{{
+                currentTicket.passengerName
+              }}</span>
+            </p>
             <p class="text-sm sm:text-base">
               <strong class="text-yellow-400 font-semibold">Issued:</strong>
               <span class="block sm:inline sm:ml-2 mt-1 sm:mt-0">{{
@@ -91,19 +120,32 @@
           📥 Download Your Ticket
         </button>
       </div>
+
+      <!-- New Ticket Button -->
+      <div class="text-center mt-6">
+        <button
+          @click="resetForm"
+          class="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 border-none px-4 sm:px-6 py-2 sm:py-3 text-base sm:text-lg font-semibold text-white rounded-xl cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg uppercase tracking-wide"
+        >
+          🎫 Generate New Ticket
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { useTicketGenerator } from "../composables/useTicketGenerator";
 import SkyTicketCanvas from "./SkyTicketCanvas.vue";
 
 const { isGenerating, currentTicket, error, generateTicket, markAsDownloaded } =
   useTicketGenerator();
 
+const userName = ref("");
+
 const handleGenerateTicket = async () => {
-  await generateTicket();
+  await generateTicket(userName.value.trim() || undefined);
 };
 
 const downloadTicket = async () => {
@@ -134,6 +176,12 @@ const downloadTicket = async () => {
       };
     }
   }, "image/png");
+};
+
+const resetForm = () => {
+  currentTicket.value = null;
+  userName.value = "";
+  error.value = null;
 };
 
 const formatDate = (date: Date) => {
