@@ -86,7 +86,7 @@ onMounted(async () => {
         <!-- Skip Button -->
         <button
           @click="skipToTicketGenerator"
-          class="absolute md:bottom-[20%] bottom-[22%] left-1/2 translate-x-[-50%] z-10 bg-gradient-to-r from-amber-500 via-yellow-600 to-amber-700 hover:from-amber-600 hover:via-yellow-700 hover:to-amber-800 text-amber-900 font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-amber-400"
+          class="absolute w-[24vw] md:bottom-[20%] bottom-[22%] left-1/2 translate-x-[-50%] z-10 bg-gradient-to-r from-amber-500 via-yellow-600 to-amber-700 hover:from-amber-600 hover:via-yellow-700 hover:to-amber-800 text-amber-900 font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-amber-400"
         >
           <MorphingText
             :texts="['Exit the Theatre', 'To the Borderland']"
