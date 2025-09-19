@@ -1,6 +1,6 @@
 <template>
   <div
-    class="font-serif max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 text-white min-h-screen"
+    class="font-serif max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 text-whitep"
   >
     <!-- Header Section -->
     <div class="text-center mb-8 sm:mb-12 pt-8 sm:pt-12" v-if="!currentTicket">
