@@ -6,7 +6,7 @@ import { Play, Pause } from "lucide-vue-next";
 import LiquidRainbowButton from "./components/LiquidRainbowButton.vue";
 import TicketGenerator from "./components/TicketGenerator.vue";
 import Loader from "./components/Loader.vue";
-import MorphingText from "./components/MorphingText.vue";
+import MorphingText from "./components/ui/morphing-text";
 
 const isFrameLoading: Ref<boolean> = ref(true);
 const isTeaserLoading: Ref<boolean> = ref(true);
