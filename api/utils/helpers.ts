@@ -14,11 +14,7 @@ export function validateTicketData(body: any): {
   valid: boolean;
   error?: string;
 } {
-  const { ticketNumber, skyType, passengerName } = body;
-
-  if (!ticketNumber || typeof ticketNumber !== "string") {
-    return { valid: false, error: "Missing or invalid ticketNumber" };
-  }
+  const { skyType, passengerName } = body;
 
   if (!skyType || !["sky1", "sky2"].includes(skyType)) {
     return { valid: false, error: "Invalid skyType. Must be sky1 or sky2" };
@@ -29,13 +25,10 @@ export function validateTicketData(body: any): {
     if (typeof passengerName !== "string") {
       return { valid: false, error: "Invalid passengerName. Must be a string" };
     }
-
+    
     // Check length limits
     if (passengerName.length > 50) {
-      return {
-        valid: false,
-        error: "passengerName must be 50 characters or less",
-      };
+      return { valid: false, error: "passengerName must be 50 characters or less" };
     }
 
     // Optional: Check for potentially harmful content

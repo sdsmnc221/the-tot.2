@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { saveSkyTicket, SkyTicketEntry } from "../utils/redis.js";
+import { saveSkyTicket, getSkyTicketById, SkyTicketEntry } from "../utils/redis.js";
 import {
   getClientIP,
   getUserAgent,
@@ -27,7 +27,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
       }
 
-      const { ticketNumber, skyType, passengerName } = req.body;
+      const { skyType, passengerName } = req.body;
+
+      // Generate a unique ticket number (server-side)
+      const ticketNumber = await generateUniqueTicketNumber();
 
       // Get client info
       const userAgent = getUserAgent(req);
@@ -64,6 +67,39 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
   }
+
+// Generate a unique ticket number with database check
+async function generateUniqueTicketNumber(): Promise<string> {
+  const MAX_ATTEMPTS = 10;
+  
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    const prefix = "Sky";
+    // Generate 5-digit number (10000-99999)
+    const mainNumber = Math.floor(Math.random() * 90000) + 10000;
+    // Generate 3-digit sequence (001-999)
+    const sequence = Math.floor(Math.random() * 999) + 1;
+    const sequenceFormatted = sequence.toString().padStart(3, "0");
+    const ticketNumber = `${prefix}.${mainNumber}-${sequenceFormatted}`;
+
+    // Check if this ticket number already exists
+    const existingTicket = await getSkyTicketById(ticketNumber);
+    
+    if (!existingTicket) {
+      return ticketNumber; // Found a unique number!
+    }
+
+    console.log(`Ticket number ${ticketNumber} already exists, attempt ${attempt}/${MAX_ATTEMPTS}`);
+    
+    // If we've exhausted attempts, use timestamp-based approach
+    if (attempt === MAX_ATTEMPTS) {
+      const timestamp = Date.now().toString().slice(-6); // Last 6 digits of timestamp
+      return `Sky.${timestamp}-${Math.floor(Math.random() * 999) + 1}`;
+    }
+  }
+
+  // This should never happen, but just in case
+  throw new Error("Failed to generate unique ticket number");
+}
 
   return res.status(405).json({
     success: false,

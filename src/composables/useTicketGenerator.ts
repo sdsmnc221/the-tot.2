@@ -9,36 +9,21 @@ export function useTicketGenerator() {
   // Use the Vercel domain for production
   const API_BASE = import.meta.env.VITE_API_URL!;
 
-  // Generate unique ticket number in format: SKY.65087-001
-  const generateTicketNumber = (): string => {
-    const prefix = "Sky";
-    // Generate 5-digit number (10000-99999)
-    const mainNumber = Math.floor(Math.random() * 90000) + 10000;
-    // Generate 3-digit sequence (001-999)
-    const sequence = Math.floor(Math.random() * 999) + 1;
-    const sequenceFormatted = sequence.toString().padStart(3, "0");
-    return `${prefix}.${mainNumber}-${sequenceFormatted}`;
-  };
-
   // Randomly select sky type
   const selectRandomSky = (): "sky1" | "sky2" => {
     return Math.random() < 0.5 ? "sky1" : "sky2";
   };
 
   // Generate ticket and save to Redis via API
-  const generateTicket = async (
-    passengerName?: string
-  ): Promise<TicketData | null> => {
+  const generateTicket = async (passengerName?: string): Promise<TicketData | null> => {
     try {
       isGenerating.value = true;
       error.value = null;
 
-      const ticketNumber = generateTicketNumber();
       const skyType = selectRandomSky();
 
-      // Prepare request body
+      // Prepare request body (server will generate unique ticket number)
       const requestBody: any = {
-        ticketNumber,
         skyType,
       };
 
