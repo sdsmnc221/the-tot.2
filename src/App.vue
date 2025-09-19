@@ -6,6 +6,7 @@ import { Play, Pause } from "lucide-vue-next";
 import LiquidRainbowButton from "./components/LiquidRainbowButton.vue";
 import TicketGenerator from "./components/TicketGenerator.vue";
 import Loader from "./components/Loader.vue";
+import MorphingText from "./components/MorphingText.vue";
 
 const isFrameLoading: Ref<boolean> = ref(true);
 const isTeaserLoading: Ref<boolean> = ref(true);
@@ -29,6 +30,10 @@ const playVideoTeaser = () => {
 
     isVideoPlaying.value = !e.paused;
   }
+};
+
+const skipToTicketGenerator = () => {
+  showTicketGenerator.value = true;
 };
 
 const handleFrameLoaded = () => {
@@ -76,8 +81,21 @@ onMounted(async () => {
     >
       <div
         v-if="!showTicketGenerator"
-        class="flex justify-center items-center w-[100vw] h-[100vh] overflow-hidden"
+        class="flex justify-center items-center w-[100vw] h-[100vh] overflow-hidden relative"
       >
+        <!-- Skip Button -->
+        <button
+          @click="skipToTicketGenerator"
+          class="absolute top-6 right-6 z-10 bg-gradient-to-r from-amber-500 via-yellow-600 to-amber-700 hover:from-amber-600 hover:via-yellow-700 hover:to-amber-800 text-amber-900 font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-amber-400"
+        >
+          <MorphingText
+            :texts="['Exit the Theatre', 'To the Borderland']"
+            className="text-lg font-bold text-amber-900"
+            :morphTime="2"
+            :cooldownTime="1.5"
+          />
+        </button>
+
         <div
           class="absolute md:h-[26vh] md:w-auto w-[48vw] h-auto aspect-square z-0"
         >
