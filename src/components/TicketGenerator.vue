@@ -161,9 +161,6 @@ const { isGenerating, currentTicket, error, generateTicket, markAsDownloaded } =
 
 const transitionLeapOfFaith = ref(false);
 
-const cityscapeMonochromeLoaded = ref(false);
-const cityscapeColorfulLoaded = ref(false);
-
 const userName = ref("");
 
 const handleGenerateTicket = async () => {
