@@ -68,7 +68,7 @@ onMounted(async () => {
 
 <template>
   <main
-    class="flex justify-center items-center w-[100vw] h-[100vh] overflow-hidden bg-teal-950"
+    class="flex justify-center items-center w-[100vw] h-[100dvh] overflow-hidden bg-teal-950"
   >
     <Transition
       enter-active-class="transition-all duration-500"
@@ -81,7 +81,7 @@ onMounted(async () => {
     >
       <div
         v-if="!showTicketGenerator"
-        class="flex justify-center items-center w-[100vw] h-[100vh] overflow-hidden relative"
+        class="flex justify-center items-center w-[100vw] h-[100dvh] overflow-hidden relative"
       >
         <!-- Skip Button -->
         <button

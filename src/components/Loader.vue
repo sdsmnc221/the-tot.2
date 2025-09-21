@@ -56,7 +56,7 @@
 
 <template>
   <div
-    class="flex justify-center items-center w-[100vw] h-[100vh] overflow-hidden bg-teal-900"
+    class="flex justify-center items-center w-[100vw] h-[100dvh] overflow-hidden bg-teal-900"
   >
     <div class="center-body">
       <div class="loader-shape-3"></div>
