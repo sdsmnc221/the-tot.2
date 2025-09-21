@@ -1,5 +1,8 @@
 <template>
-  <div class="cityscape fixed inset-0 scale-y-[-1]"></div>
+  <div
+    class="cityscape fixed inset-0 scale-y-[-1]"
+    :class="{ 'cityscape-colorful': currentTicket }"
+  ></div>
   <div
     class="font-serif max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 text-white z-0 self-end"
   >
@@ -88,7 +91,7 @@
       <div class="text-center mt-2">
         <button
           @click="downloadTicket"
-          class="w-[32vh] md:w-[16vw] uppercase bg-gradient-to-r from-teal-700 to-teal-600 hover:from-teal-600 hover:to-teal-400 border-none px-6 sm:px-8 py-3 sm:py-4 text-lg sm:text-xl font-semibold text-white rounded-xl cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg tracking-wide"
+          class="w-full uppercase bg-gradient-to-r from-teal-700 to-teal-600 hover:from-teal-600 hover:to-teal-400 border-none px-6 sm:px-8 py-3 sm:py-4 text-lg sm:text-xl font-semibold text-white rounded-xl cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg tracking-wide"
         >
           <MorphingText
             :texts="['Download my ticket.']"
@@ -164,5 +167,10 @@ const formatDate = (date: Date) => {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  transition: background-image ease 0.64s;
+
+  &-colorful {
+    background-image: url("/citiscape-colorful.gif");
+  }
 }
 </style>
