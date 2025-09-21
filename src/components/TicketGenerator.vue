@@ -1,8 +1,4 @@
 <template>
-  <div
-    class="cityscape fixed inset-0 scale-y-[-1]"
-    :class="{ 'cityscape-colorful': currentTicket }"
-  ></div>
   <Transition
     enter-active-class="transition-all duration-1000 absolute top-0 left-0"
     enter-from-class="blur-md opacity-0"
@@ -196,6 +192,18 @@ const downloadTicket = async () => {
       };
     }
   }, "image/png");
+};
+
+const checkBackgroundImageLoaded = (element, callback) => {
+  const bg = window.getComputedStyle(element).backgroundImage;
+  const url = bg.replace(/url\(['"]?(.*?)['"]?\)/, "$1");
+
+  if (url && url !== "none") {
+    const img = new Image();
+    img.onload = () => callback(true);
+    img.onerror = () => callback(false);
+    img.src = url;
+  }
 };
 
 watch(
