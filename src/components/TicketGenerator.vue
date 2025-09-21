@@ -1,4 +1,8 @@
 <template>
+  <div
+    class="cityscape fixed inset-0 scale-y-[-1]"
+    :class="{ 'cityscape-colorful': currentTicket }"
+  ></div>
   <Transition
     enter-active-class="transition-all duration-1000 absolute top-0 left-0"
     enter-from-class="blur-md opacity-0"
@@ -156,6 +160,9 @@ const { isGenerating, currentTicket, error, generateTicket, markAsDownloaded } =
   useTicketGenerator();
 
 const transitionLeapOfFaith = ref(false);
+
+const cityscapeMonochromeLoaded = ref(false);
+const cityscapeColorfulLoaded = ref(false);
 
 const userName = ref("");
 
