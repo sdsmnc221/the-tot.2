@@ -1,7 +1,6 @@
 <template>
-  <div
-    class="font-serif max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 text-whitep"
-  >
+  <div class="cityscape fixed inset-0 scale-y-[-1]"></div>
+  <div class="font-serif max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 text-white z-0">
     <!-- Header Section -->
     <div class="text-center mb-8 sm:mb-12 pt-8 sm:pt-12" v-if="!currentTicket">
       <h1
@@ -178,3 +177,12 @@ const formatDate = (date: Date) => {
   });
 };
 </script>
+
+<style lang="scss" scoped>
+.cityscape {
+  background-image: url("/citiscape-monochrome.gif");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+</style>

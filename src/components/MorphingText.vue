@@ -2,26 +2,16 @@
   <div
     :class="
       cn(
-        'relative mx-auto h-16 w-full max-w-screen-md text-center font-sans text-[40pt] font-bold leading-none [filter:url(#threshold)_blur(0.6px)] md:h-24 lg:text-[6rem]',
-        props.class,
+        'relative mx-auto w-full max-w-screen-md text-center font-sans font-bold leading-none [filter:url(#threshold)_blur(0.6px)] ',
+        props.className
       )
     "
-    style="font-family: 'Trattatello', script;"
+    style="font-family: 'Trattatello', script"
   >
-    <span
-      ref="text1Ref"
-      :class="cn(TEXT_CLASSES)"
-    />
-    <span
-      ref="text2Ref"
-      :class="cn(TEXT_CLASSES)"
-    />
+    <span ref="text1Ref" :class="cn(TEXT_CLASSES)" />
+    <span ref="text2Ref" :class="cn(TEXT_CLASSES)" />
 
-    <svg
-      id="filters"
-      class="fixed size-0"
-      preserveAspectRatio="xMidYMid slice"
-    >
+    <svg id="filters" class="fixed size-0" preserveAspectRatio="xMidYMid slice">
       <defs>
         <filter id="threshold">
           <feColorMatrix
@@ -45,7 +35,7 @@ import { ref, onMounted, onUnmounted } from "vue";
 const TEXT_CLASSES = "absolute inset-x-0 top-0 m-auto inline-block w-full";
 
 interface Props {
-  class?: string;
+  className?: string;
   texts: string[];
   morphTime?: number;
   coolDownTime?: number;
@@ -70,11 +60,16 @@ function setStyles(fraction: number) {
   text2Ref.value.style.opacity = `${Math.pow(fraction, 0.4) * 100}%`;
 
   const invertedFraction = 1 - fraction;
-  text1Ref.value.style.filter = `blur(${Math.min(8 / invertedFraction - 8, 100)}px)`;
+  text1Ref.value.style.filter = `blur(${Math.min(
+    8 / invertedFraction - 8,
+    100
+  )}px)`;
   text1Ref.value.style.opacity = `${Math.pow(invertedFraction, 0.4) * 100}%`;
 
-  text1Ref.value.textContent = props.texts[textIndex.value % props.texts.length];
-  text2Ref.value.textContent = props.texts[(textIndex.value + 1) % props.texts.length];
+  text1Ref.value.textContent =
+    props.texts[textIndex.value % props.texts.length];
+  text2Ref.value.textContent =
+    props.texts[(textIndex.value + 1) % props.texts.length];
 }
 
 function doMorph() {
