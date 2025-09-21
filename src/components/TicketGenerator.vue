@@ -130,6 +130,7 @@
             <SkyTicketCanvas
               :ticket="currentTicket"
               class="max-w-full h-auto"
+              @ticket-ready="() => (capybaraLoading = false)"
             />
           </div>
         </div>
@@ -150,6 +151,21 @@
         </div>
       </div>
     </Transition>
+
+    <Transition
+      enter-active-class="transition-all duration-500"
+      enter-from-class="opacity-0 -translate-y-2"
+      enter-to-class="opacity-100"
+      leave-active-class="transition-all duration-500"
+      leave-from-class="opacity-100 "
+      leave-to-class="opacity-0 -translate-y-2"
+      mode="out-in"
+    >
+      <CapybaraLoader
+        class="fixed translate-x-[-50%] left-1/2 bottom-[-24vh]"
+        v-if="capybaraLoading"
+      ></CapybaraLoader>
+    </Transition>
   </div>
 </template>
 
@@ -158,9 +174,12 @@ import { ref, computed, onMounted, watch } from "vue";
 import { useTicketGenerator } from "../composables/useTicketGenerator";
 import SkyTicketCanvas from "./SkyTicketCanvas.vue";
 import MorphingText from "./MorphingText.vue";
+import CapybaraLoader from "./CapybaraLoader.vue";
 
 const { isGenerating, currentTicket, error, generateTicket, markAsDownloaded } =
   useTicketGenerator();
+
+const capybaraLoading = ref(false);
 
 const transitionLeapOfFaith = ref(false);
 const userName = ref("");
@@ -273,6 +292,7 @@ watch(
     if (newLeapOfFaithState === true) {
       setTimeout(() => {
         transitionLeapOfFaith.value = false;
+        capybaraLoading.value = true;
       }, 2400);
     }
   }

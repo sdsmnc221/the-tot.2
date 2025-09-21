@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import CapybaraLoader from "./CapybaraLoader.vue";
-</script>
-
 <style scoped>
 .center-body {
   display: flex;
@@ -59,9 +55,7 @@ import CapybaraLoader from "./CapybaraLoader.vue";
 </style>
 
 <template>
-  <div
-    class="flex justify-center items-center w-[100vw] h-[100dvh] overflow-hidden bg-teal-900"
-  >
-    <CapybaraLoader></CapybaraLoader>
+  <div class="center-body">
+    <div class="loader-shape-3"></div>
   </div>
 </template>

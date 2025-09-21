@@ -19,6 +19,8 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const emit = defineEmits(["ticket-ready"]);
+
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 const canvasWidth = 364;
 const canvasHeight = 390;
@@ -74,6 +76,8 @@ const drawTicket = async (ticket: TicketData) => {
     // Fallback: draw a colored background
     drawFallbackTicket(ctx, ticket);
   }
+
+  emit("ticket-ready");
 };
 
 const drawFallbackTicket = (
