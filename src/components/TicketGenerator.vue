@@ -1,13 +1,13 @@
 <template>
   <div
     class="cityscape fixed inset-0 scale-y-[-1]"
-    :class="{ 'cityscape-colorful': currentTicket }"
+    :style="cityscapeStyle"
   ></div>
   <Transition
-    enter-active-class="transition-all duration-1000 absolute top-0 left-0"
+    enter-active-class="transition-all duration-1000"
     enter-from-class="blur-md opacity-0"
     enter-to-class="blur-none opacity-100"
-    leave-active-class="transition-all duration-1000 absolute top-0 left-0"
+    leave-active-class="transition-all duration-1000"
     leave-from-class="blur-none opacity-100"
     leave-to-class="blur-md opacity-0"
   >
@@ -52,12 +52,12 @@
           <button
             v-if="!currentTicket"
             @click="handleGenerateTicket"
-            :disabled="isGenerating"
+            :disabled="isGenerating || !areImagesReady"
             class="w-[320px] md:w-[24vw] bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 disabled:opacity-70 disabled:cursor-not-allowed border-none px-6 sm:px-10 py-4 sm:py-5 text-lg uppercase sm:text-xl font-semibold text-green-900 rounded-2xl cursor-pointer transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 tracking-wide"
             :class="{ 'animate-pulse': isGenerating }"
           >
             <MorphingText
-              v-if="!isGenerating"
+              v-if="!isGenerating && areImagesReady"
               :texts="[
                 'Let\'s generate YOUR Sky Ticket!',
                 'It only takes...a Leap of Faith!',
@@ -68,12 +68,14 @@
             />
 
             <MorphingText
-              v-else
+              v-else-if="isGenerating"
               :texts="['Will you jump?', 'Jump into the Sky...!']"
               className="text-[1.2rem] t cursor-pointer pb-4 mt-[-8px]"
               :morphTime="2"
               :cooldownTime="1.5"
             />
+
+            <span v-else class="text-base"> Loading magical assets... </span>
           </button>
 
           <div
@@ -89,17 +91,18 @@
 
   <!-- Leap of Faith -->
   <Transition
-    enter-active-class="transition-[translate,opacity] duration-1200 absolute"
+    enter-active-class="transition-[transform,opacity] duration-1200 absolute"
     style="transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55)"
     enter-from-class="translate-y-full opacity-0"
     enter-to-class="translate-y-0 opacity-100"
-    leave-active-class="transition-[translate,opacity] duration-1200 ease-in absolute"
+    leave-active-class="transition-[transform,opacity] duration-1200 ease-in absolute"
     leave-from-class="translate-y-0 opacity-100"
     leave-to-class="-translate-y-full opacity-0"
   >
     <div
-      v-if="transitionLeapOfFaith"
+      v-if="transitionLeapOfFaith && isLeapingImageReady"
       class="person-leaping w-[170px] h-[422px] scale-[0.5] pointer-events-none fixed bottom-16 z-10"
+      :style="{ backgroundImage: `url(${leapingImageUrl})` }"
     ></div>
   </Transition>
 
@@ -151,7 +154,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useTicketGenerator } from "../composables/useTicketGenerator";
 import SkyTicketCanvas from "./SkyTicketCanvas.vue";
 import MorphingText from "./MorphingText.vue";
@@ -160,10 +163,76 @@ const { isGenerating, currentTicket, error, generateTicket, markAsDownloaded } =
   useTicketGenerator();
 
 const transitionLeapOfFaith = ref(false);
-
 const userName = ref("");
 
+// Get cached blob URLs from preloaded images
+const getCachedImageUrl = (originalUrl: string): string => {
+  const cachedUrl = window.imagePreloadStatus?.cache?.get?.(originalUrl);
+  return cachedUrl || originalUrl; // Fallback to original URL
+};
+
+// Check if preloaded images are available
+const areImagesReady = computed(() => {
+  return window.imagePreloadStatus?.loaded || false;
+});
+
+// Dynamic cityscape background using cached blob URLs
+const cityscapeStyle = computed(() => {
+  if (currentTicket.value && isCityscapeColorfulReady.value) {
+    return {
+      backgroundImage: `url('${getCachedImageUrl("/citiscape-colorful.gif")}')`,
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      transition: "background-image ease 0.64s",
+    };
+  } else if (isCityscapeMonochromeReady.value) {
+    return {
+      backgroundImage: `url('${getCachedImageUrl(
+        "/citiscape-monochrome.gif"
+      )}')`,
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      transition: "background-image ease 0.64s",
+    };
+  }
+  // Fallback to CSS if preloaded images aren't ready
+  return {};
+});
+
+// Get cached leaping image URL
+const leapingImageUrl = computed(() => {
+  return getCachedImageUrl("/leaping-person.gif");
+});
+
+const isLeapingImageReady = computed(() => {
+  return window.imagePreloadStatus?.cache?.has("/leaping-person.gif") || false;
+});
+
+const isCityscapeMonochromeReady = computed(() => {
+  return (
+    window.imagePreloadStatus?.cache?.has("/citiscape-monochrome.gif") || false
+  );
+});
+
+const isCityscapeColorfulReady = computed(() => {
+  return (
+    window.imagePreloadStatus?.cache?.has("/citiscape-colorful.gif") || false
+  );
+});
+
 const handleGenerateTicket = async () => {
+  // Double-check that all critical images are ready before starting transition
+  if (
+    !areImagesReady.value ||
+    !isLeapingImageReady.value ||
+    !isCityscapeMonochromeReady.value
+  ) {
+    console.warn("Critical images not ready yet, waiting...");
+    return;
+  }
+
   transitionLeapOfFaith.value = true;
   await generateTicket(userName.value.trim() || undefined);
 };
@@ -208,23 +277,34 @@ watch(
     }
   }
 );
+
+// Optional: Log preload status for debugging
+onMounted(() => {
+  console.log(
+    "TicketGenerator mounted. Preload status:",
+    window.imagePreloadStatus
+  );
+  console.log(
+    "Available images:",
+    Array.from(window.imagePreloadStatus?.cache || [])
+  );
+});
 </script>
 
 <style lang="scss" scoped>
 .cityscape {
-  background-image: url("/citiscape-monochrome.gif");
+  // Fallback styles - will be overridden by dynamic styles when preloaded images are ready
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   transition: background-image ease 0.64s;
 
-  &-colorful {
-    background-image: url("/citiscape-colorful.gif");
-  }
+  // Fallback background images in case preloaded images aren't available
+  background-image: url("/citiscape-monochrome.gif");
 }
 
 .person-leaping {
-  background-image: url("/leaping-person.gif");
+  // Background image is set dynamically via :style binding
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

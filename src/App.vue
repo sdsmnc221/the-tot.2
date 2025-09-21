@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { type TemplateRef, type Ref, ref, onMounted, nextTick } from "vue";
+import {
+  type TemplateRef,
+  type Ref,
+  ref,
+  computed,
+  onMounted,
+  nextTick,
+} from "vue";
 import { inject } from "@vercel/analytics";
 
 import { Play, Pause } from "lucide-vue-next";
@@ -10,6 +17,7 @@ import MorphingText from "./components/MorphingText.vue";
 
 const isFrameLoading: Ref<boolean> = ref(true);
 const isTeaserLoading: Ref<boolean> = ref(true);
+const isImagesLoading: Ref<boolean> = ref(true);
 
 const videoTeaser: TemplateRef<HTMLVideoElement> = ref(null);
 
@@ -18,6 +26,10 @@ const frame: TemplateRef<HTMLImageElement> = ref(null);
 const isVideoPlaying: Ref<boolean> = ref(false);
 
 const showTicketGenerator: Ref<boolean> = ref(false);
+
+const isAllLoading = computed(
+  () => isFrameLoading.value || isTeaserLoading.value || isImagesLoading.value
+);
 
 const playVideoTeaser = () => {
   let e = videoTeaser.value;
@@ -44,6 +56,19 @@ const handleTeaserLoaded = () => {
   isTeaserLoading.value = false;
 };
 
+const checkImagePreloadStatus = () => {
+  let interval: any;
+  if (window.imagePreloadStatus?.loaded) {
+    isImagesLoading.value = false;
+    if (interval) {
+      clearInterval(interval);
+    }
+  } else {
+    // Keep checking every 100ms
+    interval = setInterval(checkImagePreloadStatus, 100);
+  }
+};
+
 onMounted(async () => {
   await nextTick();
 
@@ -59,6 +84,9 @@ onMounted(async () => {
       showTicketGenerator.value = true;
     });
   }
+
+  // Start checking image preload status
+  checkImagePreloadStatus();
 
   inject();
 });
@@ -110,7 +138,7 @@ onMounted(async () => {
         >
           <img
             alt="Theatre of Wonder"
-            src="/frame.png"
+            src="/frame.gif"
             class="frame aspect-square w-full pointer-events-none"
             ref="frame"
           />
@@ -136,10 +164,7 @@ onMounted(async () => {
     leave-from-class="blur-none opacity-100"
     leave-to-class="blur-md opacity-0"
   >
-    <Loader
-      class="fixed inset-0 z-99"
-      v-if="isFrameLoading || isTeaserLoading"
-    ></Loader>
+    <Loader class="fixed inset-0 z-99" v-if="isAllLoading"></Loader>
   </Transition>
 </template>
 
