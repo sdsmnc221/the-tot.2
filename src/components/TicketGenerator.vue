@@ -1,10 +1,12 @@
 <template>
   <div class="cityscape fixed inset-0 scale-y-[-1]"></div>
-  <div class="font-serif max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 text-white z-0">
+  <div
+    class="font-serif max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 text-white z-0 self-end"
+  >
     <!-- Header Section -->
     <div class="text-center mb-8 sm:mb-12 pt-8 sm:pt-12" v-if="!currentTicket">
       <h1
-        class="text-3xl sm:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent mb-4 drop-shadow-lg"
+        class="text-3xl sm:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent drop-shadow-lg leading-tight"
       >
         ✨ The Train of Thoughts is welcoming you aboard..! ✨
       </h1>
@@ -39,11 +41,27 @@
         v-if="!currentTicket"
         @click="handleGenerateTicket"
         :disabled="isGenerating"
-        class="bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 disabled:opacity-70 disabled:cursor-not-allowed border-none px-6 sm:px-10 py-4 sm:py-5 text-lg sm:text-xl font-semibold text-green-900 rounded-2xl cursor-pointer transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 uppercase tracking-wide"
+        class="w-[320px] md:w-[24vw] bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 disabled:opacity-70 disabled:cursor-not-allowed border-none px-6 sm:px-10 py-4 sm:py-5 text-lg uppercase sm:text-xl font-semibold text-green-900 rounded-2xl cursor-pointer transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 tracking-wide"
         :class="{ 'animate-pulse': isGenerating }"
       >
-        <span v-if="!isGenerating" class="block">🎫 Generate Sky Ticket</span>
-        <span v-else class="block">🌟 Creating Magic...</span>
+        <MorphingText
+          v-if="!isGenerating"
+          :texts="[
+            'Let\'s generate YOUR Sky Ticket!',
+            'It only takes...a Leap of Faith!',
+          ]"
+          className="text-base cursor-pointer pb-4 mt-[-8px]"
+          :morphTime="2"
+          :cooldownTime="1.5"
+        />
+
+        <MorphingText
+          v-else
+          :texts="['Will you jump?', 'Jump into the Sky...!']"
+          className="text-[1.2rem] t cursor-pointer pb-4 mt-[-8px]"
+          :morphTime="2"
+          :cooldownTime="1.5"
+        />
       </button>
 
       <div
@@ -64,59 +82,20 @@
         <div class="w-full lg:w-auto flex justify-center">
           <SkyTicketCanvas :ticket="currentTicket" class="max-w-full h-auto" />
         </div>
-
-        <!-- Ticket Info -->
-        <div
-          class="bg-white/10 p-6 sm:p-8 rounded-2xl backdrop-blur-md border border-white/20 w-full lg:w-auto lg:min-w-[300px] text-left"
-        >
-          <div class="space-y-3 sm:space-y-4">
-            <p class="text-sm sm:text-base">
-              <strong class="text-yellow-400 font-semibold"
-                >Ticket Number:</strong
-              >
-              <span class="block sm:inline sm:ml-2 mt-1 sm:mt-0">{{
-                currentTicket.ticketNumber
-              }}</span>
-            </p>
-            <p v-if="currentTicket.passengerName" class="text-sm sm:text-base">
-              <strong class="text-yellow-400 font-semibold">Passenger:</strong>
-              <span class="block sm:inline sm:ml-2 mt-1 sm:mt-0">{{
-                currentTicket.passengerName
-              }}</span>
-            </p>
-            <p class="text-sm sm:text-base">
-              <strong class="text-yellow-400 font-semibold">Issued:</strong>
-              <span class="block sm:inline sm:ml-2 mt-1 sm:mt-0">{{
-                formatDate(currentTicket.generatedAt)
-              }}</span>
-            </p>
-            <p class="text-sm sm:text-base">
-              <strong class="text-yellow-400 font-semibold">Sky Type:</strong>
-              <span class="block sm:inline sm:ml-2 mt-1 sm:mt-0">{{
-                currentTicket.skyType.toUpperCase()
-              }}</span>
-            </p>
-            <p class="text-sm sm:text-base">
-              <strong class="text-yellow-400 font-semibold">Status:</strong>
-              <span class="block sm:inline sm:ml-2 mt-1 sm:mt-0">
-                {{
-                  currentTicket.downloaded
-                    ? "✅ Downloaded"
-                    : "⏳ Ready for Download"
-                }}
-              </span>
-            </p>
-          </div>
-        </div>
       </div>
 
       <!-- Download Actions -->
-      <div class="text-center mt-8 sm:mt-12">
+      <div class="text-center mt-2">
         <button
           @click="downloadTicket"
-          class="bg-gradient-to-r from-teal-700 to-teal-600 hover:from-teal-600 hover:to-teal-400 border-none px-6 sm:px-8 py-3 sm:py-4 text-lg sm:text-xl font-semibold text-white rounded-xl cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg uppercase tracking-wide w-full sm:w-auto"
+          class="w-[32vh] md:w-[16vw] uppercase bg-gradient-to-r from-teal-700 to-teal-600 hover:from-teal-600 hover:to-teal-400 border-none px-6 sm:px-8 py-3 sm:py-4 text-lg sm:text-xl font-semibold text-white rounded-xl cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg tracking-wide"
         >
-          📥 Download Your Ticket
+          <MorphingText
+            :texts="['Download my ticket.']"
+            className="text-[1.2rem] t cursor-pointer pb-4 mt-[-8px]"
+            :morphTime="2"
+            :cooldownTime="1.5"
+          />
         </button>
       </div>
     </div>
@@ -127,6 +106,7 @@
 import { ref } from "vue";
 import { useTicketGenerator } from "../composables/useTicketGenerator";
 import SkyTicketCanvas from "./SkyTicketCanvas.vue";
+import MorphingText from "./MorphingText.vue";
 
 const { isGenerating, currentTicket, error, generateTicket, markAsDownloaded } =
   useTicketGenerator();
