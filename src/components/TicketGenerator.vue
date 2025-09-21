@@ -194,18 +194,6 @@ const downloadTicket = async () => {
   }, "image/png");
 };
 
-const checkBackgroundImageLoaded = (element, callback) => {
-  const bg = window.getComputedStyle(element).backgroundImage;
-  const url = bg.replace(/url\(['"]?(.*?)['"]?\)/, "$1");
-
-  if (url && url !== "none") {
-    const img = new Image();
-    img.onload = () => callback(true);
-    img.onerror = () => callback(false);
-    img.src = url;
-  }
-};
-
 watch(
   () => transitionLeapOfFaith.value,
   (newLeapOfFaithState) => {
