@@ -21,8 +21,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         timestamp: new Date().toISOString(),
         redis: "connected",
         env: {
-          hasRedisUrl: !!process.env.UPSTASH_REDIS_REST_URL,
-          hasRedisToken: !!process.env.UPSTASH_REDIS_REST_TOKEN,
+          hasRedisUrl: !!process.env.KV_REDIS_REST_URL,
+          hasRedisToken: !!process.env.KV_REDIS_REST_TOKEN,
           nodeEnv: process.env.NODE_ENV || "development",
         },
       });
