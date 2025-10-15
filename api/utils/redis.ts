@@ -1,12 +1,12 @@
 import { Redis } from "@upstash/redis";
 
 // Validate environment variables
-const REDIS_URL = process.env.KV_REDIS_REST_URL;
-const REDIS_TOKEN = process.env.KV_REDIS_REST_TOKEN;
+const REDIS_URL = process.env.KV_REST_API_URL;
+const REDIS_TOKEN = process.env.KV_REST_API_TOKEN;
 
 if (!REDIS_URL || !REDIS_TOKEN) {
   throw new Error(
-    "Missing required environment variables: KV_REDIS_REST_URL and KV_REDIS_REST_TOKEN"
+    "Missing required environment variables: KV_REST_API_URL and KV_REST_API_TOKEN"
   );
 }
 
