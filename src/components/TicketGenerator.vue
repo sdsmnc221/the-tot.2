@@ -14,7 +14,7 @@
     <div
       class="font-serif max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 text-white z-0 self-end"
     >
-      <div v-if="!currentTicket && !transitionLeapOfFaith" class="self-end">
+      <div v-if="!currentTicket || !transitionLeapOfFaith" class="self-end">
         <!-- Header Section -->
         <div class="text-center mb-8 sm:mb-12 pt-8 sm:pt-12">
           <h1
