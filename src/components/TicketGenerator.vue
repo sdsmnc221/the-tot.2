@@ -287,7 +287,7 @@ const downloadTicket = async () => {
 };
 
 watch(
-  [() => transitionLeapOfFaith.value, () => current ticket.value],
+  [() => transitionLeapOfFaith.value, () => currentTicket.value],
   ([newLeapOfFaithState, newCurrentTicket]) => {
     if (newLeapOfFaithState === true) {
       setTimeout(() => {
