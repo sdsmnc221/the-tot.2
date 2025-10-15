@@ -118,7 +118,7 @@
     >
       <!-- Ticket Display Section -->
       <div
-        v-if="currentTicket && !transitionLeapOfFaith"
+        v-if="!currentTicket && !transitionLeapOfFaith"
         class="mt-8 px-10 sm:mt-12"
       >
         <!-- Responsive Layout: Stack on mobile, side-by-side on desktop -->
@@ -287,12 +287,17 @@ const downloadTicket = async () => {
 };
 
 watch(
-  () => transitionLeapOfFaith.value,
-  (newLeapOfFaithState) => {
+  [() => transitionLeapOfFaith.value, () => current ticket.value],
+  ([newLeapOfFaithState, newCurrentTicket]) => {
     if (newLeapOfFaithState === true) {
       setTimeout(() => {
-        transitionLeapOfFaith.value = false;
         capybaraLoading.value = true;
+      }, 2400);
+    }
+
+if (newLeapOfFaithState === true && !!newCurrentTicket) {
+      setTimeout(() => {
+        transitionLeapOfFaith.value = false;
       }, 2400);
     }
   }
