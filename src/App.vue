@@ -238,12 +238,16 @@ onMounted(async () => {
         >
           <video
             class="aspect-square w-full"
-            src="/teaser.webm"
             ref="videoTeaser"
             preload="auto"
             playsinline
             muted
-          ></video>
+          >
+            <!-- MP4 first for Safari (it picks the first format it supports) -->
+            <source src="/teaser.mp4" type="video/mp4" />
+            <!-- WebM for Chrome/Firefox -->
+            <source src="/teaser.webm" type="video/webm" />
+          </video>
         </div>
         <div
           class="md:h-[64vh] md:w-auto w-[90vw] h-auto aspect-square relative z-1"
@@ -375,6 +379,7 @@ onMounted(async () => {
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.7;
   }
@@ -385,6 +390,7 @@ onMounted(async () => {
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.7;
   }
