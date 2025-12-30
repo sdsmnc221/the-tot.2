@@ -105,20 +105,93 @@ const checkImagePreloadStatus = () => {
   }
 };
 
+/**
+ * Safari-compatible video ready check
+ * Safari may not fire 'canplaythrough' reliably, especially without user interaction
+ */
+const setupVideoLoading = (video: HTMLVideoElement) => {
+  const videoTimeout = 5000; // 5 second timeout for video
+  let videoTimeoutId: any;
+  let resolved = false;
+
+  const markVideoReady = () => {
+    if (resolved) return;
+    resolved = true;
+    handleTeaserLoaded();
+    if (videoTimeoutId) clearTimeout(videoTimeoutId);
+  };
+
+  // Try multiple events - Safari may fire different ones
+  video.addEventListener("canplaythrough", markVideoReady);
+  video.addEventListener("loadeddata", markVideoReady); // More reliable on Safari
+  video.addEventListener("loadedmetadata", () => {
+    // If we have metadata and some data, consider it ready enough
+    if (video.readyState >= 2) {
+      markVideoReady();
+    }
+  });
+
+  // Check if already ready (can happen if cached)
+  if (video.readyState >= 3) {
+    markVideoReady();
+  }
+
+  // Fallback timeout for Safari - don't block forever
+  videoTimeoutId = setTimeout(() => {
+    if (!resolved) {
+      console.warn("Video loading timeout reached (Safari workaround)");
+      markVideoReady();
+    }
+  }, videoTimeout);
+
+  // Other event listeners
+  video.addEventListener("click", playVideoTeaser);
+  video.addEventListener("ended", () => {
+    isVideoPlaying.value = false;
+    showTicketGenerator.value = true;
+  });
+};
+
+/**
+ * Safari-compatible image load check
+ */
+const setupFrameLoading = (img: HTMLImageElement) => {
+  const imgTimeout = 8000; // 8 second timeout for GIF
+  let imgTimeoutId: any;
+
+  const markFrameReady = () => {
+    handleFrameLoaded();
+    if (imgTimeoutId) clearTimeout(imgTimeoutId);
+  };
+
+  // Check if already loaded (cached)
+  if (img.complete && img.naturalHeight !== 0) {
+    markFrameReady();
+    return;
+  }
+
+  img.addEventListener("load", markFrameReady);
+  img.addEventListener("error", () => {
+    console.error("Frame image failed to load");
+    markFrameReady(); // Don't block on error
+  });
+
+  // Fallback timeout
+  imgTimeoutId = setTimeout(() => {
+    console.warn("Frame loading timeout reached");
+    markFrameReady();
+  }, imgTimeout);
+};
+
 onMounted(async () => {
   await nextTick();
 
   if (frame.value) {
-    frame.value.addEventListener("load", handleFrameLoaded);
+    setupFrameLoading(frame.value);
   }
 
   if (videoTeaser.value) {
-    videoTeaser.value.addEventListener("canplaythrough", handleTeaserLoaded);
-    videoTeaser.value.addEventListener("click", playVideoTeaser);
-    videoTeaser.value.addEventListener("ended", () => {
-      isVideoPlaying.value = false;
-      showTicketGenerator.value = true;
-    });
+    setupVideoLoading(videoTeaser.value);
   }
 
   // Start checking image preload status
@@ -167,6 +240,9 @@ onMounted(async () => {
             class="aspect-square w-full"
             src="/teaser.webm"
             ref="videoTeaser"
+            preload="auto"
+            playsinline
+            muted
           ></video>
         </div>
         <div
