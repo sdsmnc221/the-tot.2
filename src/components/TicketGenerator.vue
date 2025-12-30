@@ -14,11 +14,14 @@
     <div
       class="font-serif max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 text-white z-0 self-end"
     >
-      <div v-if="!currentTicket && !transitionLeapOfFaith && !capybaraLoading" class="self-end">
+      <div
+        v-if="!currentTicket && !transitionLeapOfFaith && !capybaraLoading"
+        class="self-end"
+      >
         <!-- Header Section -->
         <div class="text-center mb-8 sm:mb-12 pt-8 sm:pt-12">
           <h1
-            class="text-3xl sm:text-4xl lg:text-6xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent drop-shadow-lg leading-tight"
+            class="text-3xl sm:text-4xl lg:text-6xl font-bold header-gradient drop-shadow-lg leading-tight"
           >
             ✨ The Train of Thoughts is welcoming you aboard..! ✨
           </h1>
@@ -39,7 +42,7 @@
               type="text"
               placeholder="Enter your name..."
               maxlength="50"
-              class="w-full px-4 py-3 text-lg bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/60 backdrop-blur-md focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 transition-all duration-300"
+              class="w-full px-4 py-3 text-lg input-field rounded-xl text-white placeholder-white/60 focus:outline-none transition-all duration-300"
             />
             <p class="text-white/60 text-sm mt-2">
               This will be included in your ticket metadata
@@ -53,7 +56,7 @@
             v-if="!currentTicket"
             @click="handleGenerateTicket"
             :disabled="isGenerating || !areImagesReady"
-            class="w-[320px] md:w-[24vw] bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 disabled:opacity-70 disabled:cursor-not-allowed border-none px-6 sm:px-10 py-4 sm:py-5 text-lg uppercase sm:text-xl font-semibold text-green-900 rounded-2xl cursor-pointer transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 tracking-wide"
+            class="generate-btn w-[320px] md:w-[24vw] disabled:opacity-70 disabled:cursor-not-allowed border-none px-6 sm:px-10 py-4 sm:py-5 text-lg uppercase sm:text-xl font-semibold text-green-900 rounded-2xl cursor-pointer transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 tracking-wide"
             :class="{ 'animate-pulse': isGenerating }"
           >
             <MorphingText
@@ -139,7 +142,7 @@
         <div class="text-center mt-2">
           <button
             @click="downloadTicket"
-            class="w-full uppercase bg-gradient-to-r from-teal-700 to-teal-600 hover:from-teal-600 hover:to-teal-400 border-none px-6 sm:px-8 py-3 sm:py-4 text-lg sm:text-xl font-semibold text-white rounded-xl cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg tracking-wide"
+            class="download-btn w-full uppercase border-none px-6 sm:px-8 py-3 sm:py-4 text-lg sm:text-xl font-semibold text-white rounded-xl cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg tracking-wide"
           >
             <MorphingText
               :texts="['Download my ticket']"
@@ -312,12 +315,107 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+/* Safari-compatible header gradient text */
+.header-gradient {
+  /* Solid fallback color */
+  color: #facc15;
+  /* Gradient for supporting browsers */
+  background: linear-gradient(to right, #facc15, #fde047);
+  background: -webkit-linear-gradient(left, #facc15, #fde047);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Safari-compatible input field */
+.input-field {
+  /* Solid fallback */
+  background-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  /* Safari backdrop-filter */
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.input-field:focus {
+  border-color: #facc15;
+  box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.2);
+}
+
+/* Safari-compatible Generate button */
+.generate-btn {
+  /* CRITICAL: Solid background-color fallback MUST come first for Safari */
+  background-color: #ca8a04 !important;
+  /* Then apply gradient */
+  background-image: -webkit-linear-gradient(left, #ca8a04, #eab308);
+  background-image: linear-gradient(to right, #ca8a04, #eab308);
+  /* Force GPU rendering on Safari */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  /* Ensure the background is visible */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.generate-btn:hover:not(:disabled) {
+  background-color: #eab308 !important;
+  background-image: -webkit-linear-gradient(left, #eab308, #facc15);
+  background-image: linear-gradient(to right, #eab308, #facc15);
+}
+
+.generate-btn:disabled {
+  background-color: #a16207 !important;
+  background-image: -webkit-linear-gradient(left, #a16207, #ca8a04);
+  background-image: linear-gradient(to right, #a16207, #ca8a04);
+  opacity: 0.7;
+}
+
+/* Safari-compatible Download button */
+.download-btn {
+  /* CRITICAL: Solid background-color fallback MUST come first for Safari */
+  background-color: #0f766e !important;
+  /* Then apply gradient */
+  background-image: -webkit-linear-gradient(left, #0f766e, #0d9488);
+  background-image: linear-gradient(to right, #0f766e, #0d9488);
+  /* Force GPU rendering on Safari */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  /* Ensure the background is visible */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.download-btn:hover {
+  background-color: #0d9488 !important;
+  background-image: -webkit-linear-gradient(left, #0d9488, #2dd4bf);
+  background-image: linear-gradient(to right, #0d9488, #2dd4bf);
+}
+
+/* Safari-compatible pulse animation */
+@-webkit-keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse {
+  -webkit-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 .cityscape {
   // Fallback styles - will be overridden by dynamic styles when preloaded images are ready
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   transition: background-image ease 0.64s;
+  // Safari transition fix
+  -webkit-transition: background-image ease 0.64s;
 
   // Fallback background images in case preloaded images aren't available
   background-image: url("/citiscape-monochrome.gif");
@@ -328,5 +426,16 @@ onMounted(() => {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+}
+
+/* Safari blur transition fix */
+.blur-md {
+  -webkit-filter: blur(12px);
+  filter: blur(12px);
+}
+
+.blur-none {
+  -webkit-filter: blur(0);
+  filter: blur(0);
 }
 </style>
