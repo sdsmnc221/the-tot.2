@@ -60,9 +60,9 @@ const checkImagePreloadStatus = () => {
   let interval: any;
   let timeoutId: any;
   const maxWaitTime = 15000; // 15 seconds max wait time
-  
+
   const startTime = Date.now();
-  
+
   const checkStatus = () => {
     if (window.imagePreloadStatus?.loaded) {
       isImagesLoading.value = false;
@@ -74,7 +74,9 @@ const checkImagePreloadStatus = () => {
       }
     } else if (Date.now() - startTime >= maxWaitTime) {
       // Timeout reached, continue anyway
-      console.warn("Image preloading timeout reached, continuing with app load");
+      console.warn(
+        "Image preloading timeout reached, continuing with app load"
+      );
       isImagesLoading.value = false;
       if (interval) {
         clearInterval(interval);
@@ -84,14 +86,14 @@ const checkImagePreloadStatus = () => {
       }
     }
   };
-  
+
   // Initial check
   checkStatus();
-  
+
   // Keep checking every 100ms
   if (!window.imagePreloadStatus?.loaded) {
     interval = setInterval(checkStatus, 100);
-    
+
     // Set a hard timeout
     timeoutId = setTimeout(() => {
       console.warn("Image preloading hard timeout reached");
@@ -163,7 +165,7 @@ onMounted(async () => {
         >
           <video
             class="aspect-square w-full"
-            src="/teaser.mp4"
+            src="/teaser.webm"
             ref="videoTeaser"
           ></video>
         </div>
