@@ -57,8 +57,13 @@ const loadImage = (src: string) => {
 };
 
 const preloadAllImages = async () => {
+  const timeout = new Promise((resolve) => setTimeout(resolve, 10000)); // 10 second timeout
+  
   try {
-    await Promise.all(preloadImages.map(loadImage));
+    await Promise.race([
+      Promise.all(preloadImages.map(loadImage)),
+      timeout
+    ]);
     window.imagePreloadStatus.loaded = true;
     console.log(
       "All images preloaded with blob URLs:",
