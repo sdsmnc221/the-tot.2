@@ -236,13 +236,7 @@ onMounted(async () => {
         <div
           class="absolute md:h-[26vh] md:w-auto w-[48vw] h-auto aspect-square z-0"
         >
-          <video
-            class="aspect-square w-full"
-            ref="videoTeaser"
-            preload="auto"
-            playsinline
-            muted
-          >
+          <video class="aspect-square w-full" ref="videoTeaser" preload="auto">
             <!-- MP4 first for Safari (it picks the first format it supports) -->
             <source src="/teaser.mp4" type="video/mp4" />
             <!-- WebM for Chrome/Firefox -->
