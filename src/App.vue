@@ -220,10 +220,10 @@ onMounted(async () => {
         v-if="!showTicketGenerator"
         class="flex justify-center items-center w-[100vw] h-[100dvh] overflow-hidden relative"
       >
-        <!-- Skip Button -->
+        <!-- Skip Button - moved lower on mobile to avoid overlap -->
         <button
           @click="skipToTicketGenerator"
-          class="absolute w-[200px] md:bottom-[14%] bottom-[22%] left-1/2 translate-x-[-50%] z-10 bg-gradient-to-r from-amber-500 via-yellow-600 to-amber-700 hover:from-amber-600 hover:via-yellow-700 hover:to-amber-800 text-amber-900 font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-amber-400"
+          class="absolute w-[200px] md:bottom-[14%] bottom-[8%] left-1/2 translate-x-[-50%] z-10 skip-button text-amber-900 font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-amber-400"
         >
           <MorphingText
             :texts="['Exit the Theatre', 'To the Borderland']"
@@ -254,6 +254,7 @@ onMounted(async () => {
             class="frame aspect-square w-full pointer-events-none"
             ref="frame"
           />
+          <!-- Play/Pause button - kept at 22% on mobile, now separated from skip button -->
           <LiquidRainbowButton
             @click="playVideoTeaser"
             class="absolute md:bottom-[20%] bottom-[22%] left-1/2 translate-x-[-50%]"
@@ -283,6 +284,22 @@ onMounted(async () => {
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap");
 
+/* Safari-compatible gradient button */
+.skip-button {
+  /* Solid fallback for Safari */
+  background-color: #d97706;
+  /* Standard gradient */
+  background-image: linear-gradient(to right, #f59e0b, #ca8a04, #b45309);
+  /* Webkit prefix for older Safari */
+  background-image: -webkit-linear-gradient(left, #f59e0b, #ca8a04, #b45309);
+}
+
+.skip-button:hover {
+  background-color: #b45309;
+  background-image: linear-gradient(to right, #d97706, #a16207, #92400e);
+  background-image: -webkit-linear-gradient(left, #d97706, #a16207, #92400e);
+}
+
 .ticket-generator {
   font-family: "Cinzel", serif;
   max-width: 1200px;
@@ -302,6 +319,7 @@ onMounted(async () => {
   background: linear-gradient(45deg, #ffd700, #ffed4a);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 10px;
   text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
 }
@@ -317,7 +335,11 @@ onMounted(async () => {
 }
 
 .generate-btn {
-  background: linear-gradient(45deg, #b8860b, #daa520);
+  /* Safari: Solid color fallback FIRST */
+  background-color: #b8860b;
+  /* Then gradient */
+  background-image: linear-gradient(45deg, #b8860b, #daa520);
+  background-image: -webkit-linear-gradient(45deg, #b8860b, #daa520);
   border: none;
   padding: 15px 30px;
   font-size: 1.2em;
@@ -328,6 +350,9 @@ onMounted(async () => {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(184, 134, 11, 0.4);
+  /* Safari: Force GPU layer */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .generate-btn:hover:not(:disabled) {
@@ -341,7 +366,18 @@ onMounted(async () => {
 }
 
 .generate-btn.generating {
+  -webkit-animation: pulse 1.5s infinite;
   animation: pulse 1.5s infinite;
+}
+
+@-webkit-keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 @keyframes pulse {
@@ -374,7 +410,10 @@ onMounted(async () => {
 }
 
 .download-btn {
-  background: linear-gradient(45deg, #2d5a57, #4a9b8e);
+  /* Safari: Solid fallback */
+  background-color: #2d5a57;
+  background-image: linear-gradient(45deg, #2d5a57, #4a9b8e);
+  background-image: -webkit-linear-gradient(45deg, #2d5a57, #4a9b8e);
   border: none;
   padding: 12px 25px;
   font-size: 1.1em;
@@ -396,6 +435,8 @@ onMounted(async () => {
   background: rgba(255, 255, 255, 0.1);
   padding: 20px;
   border-radius: 12px;
+  /* Safari: backdrop-filter needs prefix */
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   display: inline-block;
   text-align: left;
